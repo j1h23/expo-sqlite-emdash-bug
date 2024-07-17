@@ -1,50 +1,20 @@
-# Welcome to your Expo app 👋
+# Expo-sqlite iOS bug when inserting values that contains "–" (Em-Dash)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+In iOS, when running an insert statement in expo sqlite, whose value includes "–" (Em-Dash), the insert statement will fail. The expected behavior is that this insert statement should work. This does not seem to be an error when running on Android. The error message is "Calling the 'prepareAsync' function has failed."
 
-## Get started
+An odd behavior I observed is that if I add a line break at the end of the insert statement, I am able to run the insert statement successfully.
 
-1. Install dependencies
+## Log Output
 
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-    npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+ LOG  --------- start ---------
+ LOG  --------- test1 ---------
+ LOG  test1 (expected to succeed): band aid fix for emdash issue by adding line break at the end of query
+ LOG  success w line break query: insert into "testEmDash" ("id", "testText") VALUES ('emDash w/ line break', '–');
+ LOG  --------- test2 ---------
+ LOG  test2 (expected to fail): run insert statement that contains em dash
+ LOG  error w/o line break: Error: Calling the 'prepareAsync' function has failed
+→ Caused by: Error code 1: incomplete input
+ LOG  error w/o line break query: insert into "testEmDash" ("id", "testText") VALUES ('emDash w/o line break', '–');
+ LOG  --------- saved entries ---------
+ LOG  saved entries: [{"id": "emDash w/ line break", "testText": "–"}]
+ LOG  --------- end ---------
