@@ -5,6 +5,7 @@ In iOS, when running an insert statement in expo sqlite, whose value includes "â
 An odd behavior I observed is that if I add a line break at the end of the insert statement, I am able to run the insert statement successfully.
 
 ## Log Output
+test code file located at https://github.com/j1h23/expo-sqlite-emdash-bug/blob/master/app/(tabs)/index.tsx
 
  LOG  --------- start ---------
  
